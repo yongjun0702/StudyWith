@@ -1,11 +1,11 @@
 {
-    "name": "study_with",
-    "short_name": "study_with",
+    "name": "StudyWith",
+    "short_name": "StudyWith",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#F2F4F6",
+    "theme_color": "#F2F4F6",
+    "description": "StudyWith - 교내 학습 라운지 이용 관리 플랫폼",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
