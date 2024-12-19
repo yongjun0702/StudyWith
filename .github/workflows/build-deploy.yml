@@ -9,25 +9,22 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1
-      # https://github.com/marketplace/actions/checkout
+      # 1. Checkout the repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2
-      # https://github.com/marketplace/actions/flutter-action
+      # 2. Set up Flutter
       - name: Setup flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.24.5
 
-      # 3
+      # 3. Build web
       - name: Build web
         run: flutter build web --base-href "/StudyWith/"
 
-      # 4
-      # https://github.com/marketplace/actions/github-pages-action
+      # 4. Deploy to GitHub Pages
       - name: Deploy to github pages
         uses: peaceiris/actions-gh-pages@v3
         with:
