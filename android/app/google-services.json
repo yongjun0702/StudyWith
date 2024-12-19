@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1000026424654",
+    "project_id": "study-gachon",
+    "storage_bucket": "study-gachon.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000026424654:android:66a62c5a1a0d1b51d08a1f",
+        "android_client_info": {
+          "package_name": "com.studywith.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_VYnVvxMsPU_YNe-H2mNbN4Em3ApH4ik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
