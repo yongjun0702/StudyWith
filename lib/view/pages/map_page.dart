@@ -288,7 +288,10 @@ class _MapPageState extends State<MapPage> {
         buttonText: "확인",
         buttonCount: 1,
         func: () {
-          Navigator.pop(context);
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => RootTab()),
+                (Route<dynamic> route) => false,
+          );
         },
       );
     } catch (e) {
