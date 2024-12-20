@@ -44,7 +44,7 @@ jobs:
   # Firebase Functions 배포 Job
   deploy-functions:
     runs-on: ubuntu-latest
-    needs: build-and-deploy-web  # 웹 앱 배포 후 실행
+    needs: build-and-deploy-web  # Flutter 웹 앱 배포 후 실행
 
     steps:
       # 1. Checkout the repository
@@ -61,8 +61,16 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      # 4. Deploy Firebase Functions using token
+      # 4. Install Dependencies for Functions
+      - name: Install Dependencies
+        run: |
+          cd functions
+          npm install
+
+      # 5. Deploy Firebase Functions using token
       - name: Deploy Firebase Functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: firebase deploy --only functions
+        run: |
+          cd functions
+          firebase deploy --only functions
