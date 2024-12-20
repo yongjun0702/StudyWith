@@ -172,6 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nicknameController = TextEditingController();
   bool _obscureText = true;
+  bool _isLoading = false;
   String? _errorMessage;
 
   void _toggleVisibility() {
@@ -285,17 +286,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               // 회원가입 버튼
               ElevatedButton(
-                onPressed: () async {
+                onPressed: _isLoading
+                    ? null // 로딩 중에는 버튼을 비활성화
+                    : () async {
                   if (_validateFields()) {
+                    setState(() {
+                      _isLoading = true; // 로딩 시작
+                      _errorMessage = ''; // 기존 오류 메시지 초기화
+                    });
+
                     try {
                       await authProvider.signUpWithEmail(
-                          _emailController.text,
-                          _passwordController.text,
-                          _nicknameController.text);
+                        _emailController.text,
+                        _passwordController.text,
+                        _nicknameController.text,
+                      );
                       Navigator.pop(context); // 로그인 화면으로 돌아가기
                     } catch (e) {
                       setState(() {
                         _errorMessage = "회원가입 실패: 다시 시도하세요.";
+                      });
+                    } finally {
+                      setState(() {
+                        _isLoading = false; // 로딩 종료
                       });
                     }
                   }
