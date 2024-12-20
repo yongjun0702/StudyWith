@@ -71,7 +71,7 @@ const RESOURCES = {"icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2e
 "apple-icon.png": "5726f42e45e38b5a4d9050af060888b5",
 "flutter.js": "f393d3c16b631f36852323de8e583132",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"flutter_bootstrap.js": "417dc4248a2659b34820885d8395950e",
+"flutter_bootstrap.js": "a7d5c515e1cc18c88e8b4cf54e0c3e3e",
 "site.webmanifest": "451b09a8ca5e2463d1b5165966b1c4b0",
 "main.dart.js": "3c4bcb04da2c19a58085257145cb4d96",
 "apple-touch-icon.png": "dbcf5d3561970cb953efb1cf26a53bb2",
