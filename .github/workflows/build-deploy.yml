@@ -10,23 +10,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout the repository
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 2. Setup Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.5'
 
+      # 3. Install dependencies
       - name: Install Dependencies
         run: flutter pub get
 
+      # 4. Build the Flutter web app
       - name: Build Web
         run: flutter build web --release
 
-      - name: Deploy to gitHub pages
+      # 5. Create a CNAME file for the custom domain
+      - name: Create CNAME file
+        run: echo "studywith.online" > ./build/web/CNAME  # replace with your actual domain
+
+      # 6. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.STUDYWITH }}
-          publish_dir: build/web
+          publish_dir: ./build/web
           publish_branch: gh-pages
