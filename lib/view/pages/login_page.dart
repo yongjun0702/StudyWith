@@ -14,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
+  bool _isLoading = false;
   String? _errorMessage;
 
   void _toggleVisibility() {
@@ -108,22 +109,35 @@ class _LoginScreenState extends State<LoginScreen> {
 
               // 로그인 버튼
               ElevatedButton(
-                onPressed: () async {
-                  if (_validateFields()) {
-                    try {
-                      await authProvider.signInWithEmail(
-                          _emailController.text, _passwordController.text);
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                            (Route<dynamic> route) => false,
-                      );
-                    } catch (e) {
-                      setState(() {
-                        _errorMessage = "로그인 실패: 이메일 또는 비밀번호를 확인하세요.";
-                      });
-                    }
-                  }
-                },
+                onPressed: _isLoading
+                    ? null // 로딩 중에는 버튼을 비활성화
+                    : () async {
+                        if (_validateFields()) {
+                          setState(() {
+                            _isLoading = true; // 로딩 시작
+                            _errorMessage = null; // 기존 오류 메시지 초기화
+                          });
+
+                          try {
+                            await authProvider.signInWithEmail(
+                                _emailController.text,
+                                _passwordController.text);
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()),
+                              (Route<dynamic> route) => false,
+                            );
+                          } catch (e) {
+                            setState(() {
+                              _errorMessage = "로그인 실패: 이메일 또는 비밀번호를 확인하세요.";
+                            });
+                          } finally {
+                            setState(() {
+                              _isLoading = false; // 로딩 종료
+                            });
+                          }
+                        }
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: mainBlue,
                   shape: RoundedRectangleBorder(
@@ -131,8 +145,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   minimumSize: Size(double.infinity, 50),
                 ),
-                child:
-                Text("로그인", style: TextStyle(fontSize: 20, color: white)),
+                child: _isLoading
+                    ? CircularProgressIndicator(color: white, strokeWidth: 4) // 로딩 인디케이터
+                    : Text("로그인", style: TextStyle(fontSize: 20, color: white)),
               ),
               SizedBox(height: 5),
 
@@ -289,30 +304,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: _isLoading
                     ? null // 로딩 중에는 버튼을 비활성화
                     : () async {
-                  if (_validateFields()) {
-                    setState(() {
-                      _isLoading = true; // 로딩 시작
-                      _errorMessage = ''; // 기존 오류 메시지 초기화
-                    });
+                        if (_validateFields()) {
+                          setState(() {
+                            _isLoading = true; // 로딩 시작
+                            _errorMessage = null; // 기존 오류 메시지 초기화
+                          });
 
-                    try {
-                      await authProvider.signUpWithEmail(
-                        _emailController.text,
-                        _passwordController.text,
-                        _nicknameController.text,
-                      );
-                      Navigator.pop(context); // 로그인 화면으로 돌아가기
-                    } catch (e) {
-                      setState(() {
-                        _errorMessage = "회원가입 실패: 다시 시도하세요.";
-                      });
-                    } finally {
-                      setState(() {
-                        _isLoading = false; // 로딩 종료
-                      });
-                    }
-                  }
-                },
+                          try {
+                            await authProvider.signUpWithEmail(
+                              _emailController.text,
+                              _passwordController.text,
+                              _nicknameController.text,
+                            );
+                            Navigator.pop(context); // 로그인 화면으로 돌아가기
+                          } catch (e) {
+                            setState(() {
+                              _errorMessage = "회원가입 실패: 다시 시도하세요.";
+                            });
+                          } finally {
+                            setState(() {
+                              _isLoading = false; // 로딩 종료
+                            });
+                          }
+                        }
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: mainBlue,
                   shape: RoundedRectangleBorder(
@@ -320,8 +335,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   minimumSize: Size(double.infinity, 50),
                 ),
-                child:
-                Text("회원가입", style: TextStyle(fontSize: 20, color: white)),
+                child: _isLoading
+                    ? CircularProgressIndicator(
+                        color: white,
+                        strokeWidth: 4,
+                      )
+                    : Text("회원가입",
+                        style: TextStyle(fontSize: 20, color: white)),
               ),
             ],
           ),

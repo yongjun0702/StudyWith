@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:study_with/config/color/color.dart';
 import 'package:study_with/view/widgets/button_widget.dart';
 import 'package:study_with/view/widgets/dialog_widget.dart';
@@ -115,10 +115,28 @@ class _MapPageState extends State<MapPage> {
   ];
   bool _isBottomSheetOpen = false;
 
+  void _toggleMapInteraction(bool enable) {
+    final iframeElements = html.document.getElementsByTagName('iframe');
+    for (var element in iframeElements) {
+      if (element is html.Element) { // Node를 Element로 안전하게 캐스팅
+        element.style.pointerEvents = enable ? 'auto' : 'none';
+      }
+    }
+  }
   void _showBottomSheet(String title, String loungeId, List<String> details) {
     setState(() {
       _isBottomSheetOpen = true;
+      _toggleMapInteraction(false); // Google Maps 비활성화
     });
+
+    // 라운지 유형별 이미지 맵핑
+    final Map<String, String> loungeImages = {
+      '아르테크네 스페이스': 'assets/img/lounge_img2.png',
+      '하나라운지': 'assets/img/lounge_img10.png',
+      '라곰 스페이스': 'assets/img/lounge_img1.png',
+      'G-SPACE': 'assets/img/lounge_img4.jpg',
+      'C-CUBE': 'assets/img/lounge_img5.png',
+    };
 
     showModalBottomSheet(
       context: context,
@@ -126,8 +144,7 @@ class _MapPageState extends State<MapPage> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       ),
-      isDismissible: false,
-      // 바깥을 눌러도 닫히지 않도록 설정
+      isDismissible: true,
       builder: (context) {
         return Container(
           padding: const EdgeInsets.all(20),
@@ -145,13 +162,32 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-
+              const SizedBox(height: 10),
+              Text(
+                "원하는 라운지를 선택해보세요.\n24시간이 지나면 자동으로 이용이 종료됩니다.",
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: black,
+                ),
+              ),
+              const SizedBox(height: 10),
               // 세부 내용 리스트
               Expanded(
                 child: ListView.builder(
                   itemCount: details.length,
                   itemBuilder: (context, index) {
+                    // 라운지 유형에 따른 이미지 선택
+                    String? loungeType;
+                    String? loungeImage;
+
+                    for (String type in loungeImages.keys) {
+                      if (details[index].contains(type)) {
+                        loungeType = type;
+                        loungeImage = loungeImages[type];
+                        break;
+                      }
+                    }
+
                     return Card(
                       color: white,
                       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -160,44 +196,83 @@ class _MapPageState extends State<MapPage> {
                         side: BorderSide(color: mainBlue, width: 1.5),
                       ),
                       elevation: 0,
-                      // 그림자 제거
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        title: Text(
-                          details[index],
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: mainBlue,
-                          size: 18,
-                        ),
+                      child: InkWell(
                         onTap: () {
                           _selectLounge(loungeId, title, details[index]);
                         },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 이미지 섹션
+                            if (loungeImage != null)
+                              ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                                child: Image.asset(
+                                  loungeImage,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+
+                            // 텍스트 섹션
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // 라운지 이름
+                                    Text(
+                                      details[index],
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+
+                                    // 라운지 유형
+                                    if (loungeType != null)
+                                      Text(
+                                        loungeType,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey[700],
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
                 ),
               ),
 
+              // 닫기 버튼
               Center(
                 child: CustomButton(
-                    width: 100,
-                    height: 50,
-                    text: "닫기",
-                    func: () {
-                      setState(() {
-                        _isBottomSheetOpen = false; // 바텀시트 상태 업데이트
-                      });
-                      Navigator.pop(context);
-                    },
-                    buttonCount: 1),
+                  width: 100,
+                  height: 50,
+                  text: "닫기",
+                  func: () {
+                    setState(() {
+                      _isBottomSheetOpen = false; // 바텀시트 상태 업데이트
+                      _toggleMapInteraction(true); // Google Maps 재활성화
+                    });
+                    Navigator.pop(context);
+                  },
+                  buttonCount: 1,
+                ),
               ),
             ],
           ),
@@ -207,10 +282,10 @@ class _MapPageState extends State<MapPage> {
       // 바텀시트가 닫힐 때 상태 업데이트
       setState(() {
         _isBottomSheetOpen = false;
+        _toggleMapInteraction(true); // Google Maps 재활성화
       });
     });
   }
-
   void _selectLounge(String loungeId, String loungeName, String detail) async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;
     final DocumentReference userDoc =
@@ -290,7 +365,7 @@ class _MapPageState extends State<MapPage> {
         func: () {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => RootTab()),
-                (Route<dynamic> route) => false,
+            (Route<dynamic> route) => false,
           );
         },
       );
@@ -307,6 +382,7 @@ class _MapPageState extends State<MapPage> {
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -341,20 +417,16 @@ class _MapPageState extends State<MapPage> {
                 target: LatLng(37.451039959670574, 127.12875330395157),
                 zoom: 17.2,
               ),
-              mapType: kIsWeb ? MapType.normal : MapType.hybrid,
+              mapType: MapType.normal,
               markers: markers,
               onMapCreated: (GoogleMapController controller) {
                 _mapControllerCompleter.complete(controller);
               },
             ),
-            // 웹에서 바텀시트가 열릴 때 지도를 터치하지 못하도록 하는 투명 오버레이
             if (_isBottomSheetOpen)
-              Positioned.fill(
-                child: GestureDetector(
-                  onTap: () {}, // 아무 작업도 하지 않음
-                  child: Container(
-                    color: Colors.black.withOpacity(0.3), // 반투명 오버레이
-                  ),
+              PointerInterceptor(
+                child: Container(
+                  color: Colors.transparent,
                 ),
               ),
           ],
