@@ -1,1 +1,56 @@
-{"flutter":{"platforms":{"ios":{"default":{"projectId":"study-gachon","appId":"1:1000026424654:ios:42d9c79dff331dfed08a1f","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"study-gachon","appId":"1:1000026424654:ios:42d9c79dff331dfed08a1f","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"study-gachon","configurations":{"android":"1:1000026424654:android:66a62c5a1a0d1b51d08a1f","ios":"1:1000026424654:ios:42d9c79dff331dfed08a1f","macos":"1:1000026424654:ios:42d9c79dff331dfed08a1f","web":"1:1000026424654:web:943c194549d15426d08a1f","windows":"1:1000026424654:web:97b66d6af9e74360d08a1f"}}},"android":{"default":{"projectId":"study-gachon","appId":"1:1000026424654:android:66a62c5a1a0d1b51d08a1f","fileOutput":"android/app/google-services.json"}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "ios": {
+        "default": {
+          "projectId": "study-gachon",
+          "appId": "1:1000026424654:ios:42d9c79dff331dfed08a1f",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "study-gachon",
+          "appId": "1:1000026424654:ios:42d9c79dff331dfed08a1f",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "study-gachon",
+          "configurations": {
+            "android": "1:1000026424654:android:66a62c5a1a0d1b51d08a1f",
+            "ios": "1:1000026424654:ios:42d9c79dff331dfed08a1f",
+            "macos": "1:1000026424654:ios:42d9c79dff331dfed08a1f",
+            "web": "1:1000026424654:web:943c194549d15426d08a1f",
+            "windows": "1:1000026424654:web:97b66d6af9e74360d08a1f"
+          }
+        }
+      },
+      "android": {
+        "default": {
+          "projectId": "study-gachon",
+          "appId": "1:1000026424654:android:66a62c5a1a0d1b51d08a1f",
+          "fileOutput": "android/app/google-services.json"
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}
