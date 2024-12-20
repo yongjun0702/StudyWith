@@ -67,7 +67,13 @@ jobs:
           cd functions
           npm install
 
-      # 5. Deploy Firebase Functions using token
+      # 5. Lint and Fix
+      - name: Lint and Fix
+        run: |
+          cd functions
+          npx eslint . --fix
+
+      # 6. Deploy Firebase Functions using token
       - name: Deploy Firebase Functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
