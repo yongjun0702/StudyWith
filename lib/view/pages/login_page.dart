@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       await authProvider.signInWithEmail(
                           _emailController.text, _passwordController.text);
                       Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => RootTab()),
+                        MaterialPageRoute(builder: (context) => HomePage()),
                             (Route<dynamic> route) => false,
                       );
                     } catch (e) {

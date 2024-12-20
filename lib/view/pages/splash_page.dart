@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:study_with/config/color/color.dart';
+import 'package:study_with/view/pages/home_page.dart';
 import 'package:study_with/view/widgets/tab_widget.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => RootTab()),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       }
     });

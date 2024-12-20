@@ -159,42 +159,49 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
         backgroundColor: background,
-        appBar: AppBar(
-          scrolledUnderElevation: 0,
-          backgroundColor: background,
-          title: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Container(
-                width: 70,
-                height: 70,
-                child: Image.asset("assets/img/logo.png"),
-              )),
-          centerTitle: false,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SettingScreen(),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(90),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppBar(
+                scrolledUnderElevation: 0,
+                backgroundColor: background,
+                title: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      child: Image.asset("assets/img/logo.png"),
+                    )),
+                centerTitle: false,
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 28),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SettingScreen(),
+                          ),
+                        );
+                      },
+                      child: Image.asset(
+                        "assets/img/settings.png",
+                        color: subBlue,
+                      ),
                     ),
-                  );
-                },
-                child: Image.asset(
-                  "assets/img/settings.png",
-                  color: subBlue,
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 10),
               Column(
                 children: [
                   Padding(

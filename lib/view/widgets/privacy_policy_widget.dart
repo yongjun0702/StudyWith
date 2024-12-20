@@ -207,7 +207,7 @@ class DeveloperBottomSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "조용준",
+                "개발자: 조용준",
                 style: TextStyle(
                   color: mainBlue,
                   fontSize: 24,
