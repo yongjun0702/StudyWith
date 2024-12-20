@@ -466,6 +466,8 @@ class _HomePageState extends State<HomePage> {
                         final totalB = b['total_users'] as int;
                         return totalB.compareTo(totalA);
                       });
+                      // 상위 5개만 표시
+                      final topLounges = lounges.take(5).toList();
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -487,7 +489,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               const SizedBox(height: 10),
                               Column(
-                                children: lounges.map((lounge) {
+                                children: topLounges.map((lounge) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 5),
                                     child: Row(
