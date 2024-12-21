@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:study_with/server/auth_provider.dart';
 import 'package:study_with/config/color/color.dart';
 import 'package:study_with/view/pages/home_page.dart';
-import 'package:study_with/view/widgets/tab_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -49,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 70),
@@ -76,6 +75,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
+                textInputAction: TextInputAction.next,
+                onSubmitted: (_) {
+                  FocusScope.of(context).nextFocus(); // 다음 필드로 이동
+                },
               ),
               SizedBox(height: 20),
 
@@ -97,6 +100,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) {
+                  FocusScope.of(context).unfocus(); // 키보드 닫기
+                },
               ),
               if (_errorMessage != null) ...[
                 SizedBox(height: 10),
@@ -112,32 +119,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: _isLoading
                     ? null // 로딩 중에는 버튼을 비활성화
                     : () async {
-                        if (_validateFields()) {
-                          setState(() {
-                            _isLoading = true; // 로딩 시작
-                            _errorMessage = null; // 기존 오류 메시지 초기화
-                          });
+                  if (_validateFields()) {
+                    setState(() {
+                      _isLoading = true; // 로딩 시작
+                      _errorMessage = null; // 기존 오류 메시지 초기화
+                    });
 
-                          try {
-                            await authProvider.signInWithEmail(
-                                _emailController.text,
-                                _passwordController.text);
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()),
-                              (Route<dynamic> route) => false,
-                            );
-                          } catch (e) {
-                            setState(() {
-                              _errorMessage = "로그인 실패: 이메일 또는 비밀번호를 확인하세요.";
-                            });
-                          } finally {
-                            setState(() {
-                              _isLoading = false; // 로딩 종료
-                            });
-                          }
-                        }
-                      },
+                    try {
+                      await authProvider.signInWithEmail(
+                          _emailController.text,
+                          _passwordController.text);
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => HomePage()),
+                            (Route<dynamic> route) => false,
+                      );
+                    } catch (e) {
+                      setState(() {
+                        _errorMessage = "로그인 실패: 이메일 또는 비밀번호를 확인하세요.";
+                      });
+                    } finally {
+                      setState(() {
+                        _isLoading = false; // 로딩 종료
+                      });
+                    }
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: mainBlue,
                   shape: RoundedRectangleBorder(
@@ -224,32 +231,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-
-    // 키보드가 열렸는지 확인
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Scaffold(
+      backgroundColor: white,
       appBar: AppBar(
-        title: Text("회원가입", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text("회원가입", style: TextStyle(fontWeight: FontWeight.bold),),
         centerTitle: true,
-        backgroundColor: background,
-        elevation: 0,
+        backgroundColor: white,
       ),
-      backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!isKeyboardOpen) ...[
-                // 키보드가 열리지 않았을 때만 보이는 텍스트
+              if (!isKeyboardOpen)
                 Text(
                   "간단한 정보를 입력 후\n서비스를 이용하세요.",
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 40),
-              ],
+              if (!isKeyboardOpen) SizedBox(height: 40),
+
               // 닉네임 입력
               TextField(
                 controller: _nicknameController,
@@ -260,6 +263,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
+                textInputAction: TextInputAction.next,
+                onSubmitted: (_) {
+                  FocusScope.of(context).nextFocus(); // 다음 입력 필드로 이동
+                },
               ),
               SizedBox(height: 20),
 
@@ -273,6 +280,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
+                textInputAction: TextInputAction.next,
+                onSubmitted: (_) {
+                  FocusScope.of(context).nextFocus(); // 다음 입력 필드로 이동
+                },
               ),
               SizedBox(height: 20),
 
@@ -294,6 +305,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) {
+                  FocusScope.of(context).unfocus(); // 키보드 닫기
+                },
               ),
               if (_errorMessage != null) ...[
                 SizedBox(height: 10),
