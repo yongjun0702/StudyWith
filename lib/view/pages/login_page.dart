@@ -225,26 +225,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
 
+    // 키보드가 열렸는지 확인
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+
     return Scaffold(
       backgroundColor: background,
-      appBar: AppBar(
-        title: Text("회원가입", style: TextStyle(fontWeight: FontWeight.bold)),
-        centerTitle: true,
-        backgroundColor: background,
-        elevation: 0,
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "간단한 정보를 입력 후\n서비스를 이용하세요.",
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 40),
-
+              if (!isKeyboardOpen) ...[
+                // 키보드가 열리지 않았을 때만 보이는 텍스트
+                Text(
+                  "간단한 정보를 입력 후\n서비스를 이용하세요.",
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 40),
+              ],
               // 닉네임 입력
               TextField(
                 controller: _nicknameController,
@@ -304,30 +303,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: _isLoading
                     ? null // 로딩 중에는 버튼을 비활성화
                     : () async {
-                        if (_validateFields()) {
-                          setState(() {
-                            _isLoading = true; // 로딩 시작
-                            _errorMessage = null; // 기존 오류 메시지 초기화
-                          });
+                  if (_validateFields()) {
+                    setState(() {
+                      _isLoading = true; // 로딩 시작
+                      _errorMessage = null; // 기존 오류 메시지 초기화
+                    });
 
-                          try {
-                            await authProvider.signUpWithEmail(
-                              _emailController.text,
-                              _passwordController.text,
-                              _nicknameController.text,
-                            );
-                            Navigator.pop(context); // 로그인 화면으로 돌아가기
-                          } catch (e) {
-                            setState(() {
-                              _errorMessage = "회원가입 실패: 다시 시도하세요.";
-                            });
-                          } finally {
-                            setState(() {
-                              _isLoading = false; // 로딩 종료
-                            });
-                          }
-                        }
-                      },
+                    try {
+                      await authProvider.signUpWithEmail(
+                        _emailController.text,
+                        _passwordController.text,
+                        _nicknameController.text,
+                      );
+                      Navigator.pop(context); // 로그인 화면으로 돌아가기
+                    } catch (e) {
+                      setState(() {
+                        _errorMessage = "회원가입 실패: 다시 시도하세요.";
+                      });
+                    } finally {
+                      setState(() {
+                        _isLoading = false; // 로딩 종료
+                      });
+                    }
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: mainBlue,
                   shape: RoundedRectangleBorder(
@@ -337,11 +336,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 child: _isLoading
                     ? CircularProgressIndicator(
-                        color: white,
-                        strokeWidth: 4,
-                      )
-                    : Text("회원가입",
-                        style: TextStyle(fontSize: 20, color: white)),
+                  color: white,
+                  strokeWidth: 4,
+                )
+                    : Text(
+                  "회원가입",
+                  style: TextStyle(fontSize: 20, color: white),
+                ),
+              ),
+              SizedBox(height: 5),
+
+              // 로그인 화면으로 돌아가기 버튼
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: mainBlue, width: 0.5),
+                    ),
+                  ),
+                  child: Text(
+                    '이미 계정이 있으신가요? 로그인',
+                    style: TextStyle(fontSize: 16, color: mainBlue),
+                  ),
+                ),
               ),
             ],
           ),
