@@ -27,7 +27,7 @@ jobs:
 
       # 4. Build the Flutter web app
       - name: Build Web
-        run: flutter build web --release
+        run: flutter build web --release --base-href="./"
 
       # 5. Create a CNAME file for the custom domain
       - name: Create CNAME file
