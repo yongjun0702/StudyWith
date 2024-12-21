@@ -229,6 +229,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("회원가입", style: TextStyle(fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: background,
+        elevation: 0,
+      ),
       backgroundColor: background,
       body: SingleChildScrollView(
         child: Padding(
@@ -345,24 +351,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               SizedBox(height: 5),
-
-              // 로그인 화면으로 돌아가기 버튼
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: mainBlue, width: 0.5),
-                    ),
-                  ),
-                  child: Text(
-                    '이미 계정이 있으신가요? 로그인',
-                    style: TextStyle(fontSize: 16, color: mainBlue),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
