@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:study_with/config/color/color.dart';
 import 'package:study_with/view/pages/home_page.dart';
-import 'package:study_with/view/pages/setting_screen.dart';
+import 'package:study_with/view/pages/setting_page.dart';
 
 class RootTab extends StatefulWidget {
   const RootTab({super.key});

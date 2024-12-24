@@ -23,7 +23,6 @@ class DetailPage extends StatelessWidget {
           style: TextStyle(
             color: black,
             fontWeight: FontWeight.bold,
-            fontSize: 18,
           ),
         ),
         centerTitle: true,

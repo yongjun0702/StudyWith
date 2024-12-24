@@ -58,12 +58,14 @@ class LoginService {
   Future<void> reauthenticateWithEmail(String email, String password) async {
     try {
       final AuthCredential credential = EmailAuthProvider.credential(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       await _auth.currentUser?.reauthenticateWithCredential(credential);
       print("재인증 성공");
     } catch (e) {
-      print("재인증 실패: $e");
-      rethrow;
+      print("재인증 실패: ${e.runtimeType}, $e");
+      throw Exception("재인증 실패: 이메일과 비밀번호를 확인하세요.");
     }
   }
 
