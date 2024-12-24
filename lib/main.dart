@@ -10,7 +10,7 @@ import 'package:study_with/view/pages/login_page.dart';
 import 'package:study_with/view/pages/splash_page.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:intl/date_symbol_data_local.dart';
-
+import 'dart:html' as html;
 late Size ratio;
 
 
@@ -29,9 +29,12 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,
     overlays: [
-      SystemUiOverlay.bottom,
     ],
   );
+
+  html.document.documentElement?.style.overflow = 'hidden';
+  html.document.body?.style.margin = '0';
+  html.document.body?.style.padding = '0';
 
   runApp(const MyApp());
 }
