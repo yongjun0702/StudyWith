@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_with/config/color/color.dart';
 import 'package:study_with/view/pages/detail_page.dart';
 import 'package:study_with/view/pages/map_page.dart';
-import 'package:study_with/view/pages/setting_page.dart';
+import 'package:study_with/view/pages/setting_screen.dart';
 import 'package:study_with/view/widgets/container_widget.dart';
 import 'package:study_with/view/widgets/dialog_widget.dart';
 

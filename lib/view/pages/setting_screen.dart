@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study_with/config/color/color.dart';
 import 'package:study_with/server/auth_provider.dart';
-import 'package:study_with/view/pages/delete_account_page.dart';
 import 'package:study_with/view/pages/login_page.dart';
 import 'package:study_with/view/widgets/dialog_widget.dart';
 import 'package:study_with/view/widgets/privacy_policy_widget.dart';
@@ -146,9 +145,24 @@ class SettingScreen extends StatelessWidget {
               SizedBox(height: 15),
               GestureDetector(
                 onTap: () async {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => DeleteAccountScreen()),
-                  );
+                  CustomDialog(
+                      context: context,
+                      title: "회원탈퇴",
+                      dialogContent: "탈퇴 하시겠습니까?",
+                      buttonText: "확인",
+                      buttonCount: 2,
+                      func: () async {
+                        try {
+                          await authProvider.deleteAccount;
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
+                                (route) => false,
+                          );
+                        } catch (e) {
+                          print("회원탈퇴 실패: $e");
+                        }
+                      });
                 },
                 child: Container(
                   width: double.infinity,
