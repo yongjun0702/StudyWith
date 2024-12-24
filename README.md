@@ -1,16 +1,6 @@
-# study_with
+# StudyWith
+교내 학습 라운지 이용 관리 플랫폼 <br>
+https://studywith.online
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# 구동 화면
+<img src="https://github.com/user-attachments/assets/a79b352b-c5d2-40ad-938f-271cd4814553" width="270" height="480"/>
