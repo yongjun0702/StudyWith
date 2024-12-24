@@ -34,7 +34,8 @@
 
     #flutter-container {
       width: 100%;
-      height: 100%;
+      height: auto; /* Flutter 앱 높이를 콘텐츠에 따라 유동적으로 설정 */
+      min-height: 100vh; /* 최소 높이를 뷰포트 높이로 설정 */
     }
 
     #content {
@@ -82,6 +83,10 @@
     document.body.style.height = 'auto';
     document.body.style.overflow = 'auto';
     document.documentElement.style.overflow = 'auto';
+    // Flutter 컨테이너가 루트 스크롤을 따르도록 설정
+    const flutterContainer = document.getElementById('flutter-container');
+    flutterContainer.style.height = 'auto';
+    flutterContainer.style.minHeight = '100vh';
   }
 
   // DOMContentLoaded 이벤트
