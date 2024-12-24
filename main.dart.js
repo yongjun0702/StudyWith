@@ -27415,14 +27415,7 @@ case 3:A.b3S()
 s=4
 return A.y(A.anV(A.a([B.M4,B.M5],t.UW)),$async$JZ)
 case 4:A.S8(B.Hv,A.a([],t.BG))
-q=document
-p=q.documentElement
-if(p!=null){p=p.style
-p.overflow="hidden"}p=q.body
-if(p!=null){p=p.style
-p.margin="0"}q=q.body
-if(q!=null){q=q.style
-q.padding="0"}if($.ak==null)A.aLE()
+if($.ak==null)A.aLE()
 q=$.ak
 q.toString
 p=$.aV()
