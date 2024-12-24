@@ -7,32 +7,35 @@ admin.initializeApp();
 exports.autoEndSessions = functions.pubsub.schedule("every 1 hour").onRun(async (context) => {
   const db = admin.firestore();
   const now = admin.firestore.Timestamp.now();
-  const cutoffTime = now.toMillis() - 24 * 60 * 60 * 1000; // 24시간 전 타임스탬프
+  const cutoffTime = admin.firestore.Timestamp.fromMillis(now.toMillis() - 24 * 60 * 60 * 1000); // 24시간 전
 
-  // 24시간 초과하고 아직 종료되지 않은 세션만 가져옴
-  const userSessions = await db.collection("user_sessions")
-    .where("active_session.start_time", "<=", cutoffTime)
-    .where("active_session.end_time", "==", null)
-    .get();
+  console.log(`Current time: ${now.toDate()}, Cutoff time: ${cutoffTime.toDate()}`);
 
-  if (userSessions.empty) {
-    console.log("No sessions to end.");
-    return;
-  }
+  try {
+    const userSessions = await db.collection("user_sessions")
+      .where("active_session.start_time", "<=", cutoffTime)
+      .where("active_session.end_time", "==", null)
+      .get();
 
-  const batch = db.batch(); // 배치 작업 시작
+    console.log(`Found ${userSessions.size} sessions to process.`);
 
-  userSessions.forEach(doc => {
-    const data = doc.data();
-    const activeSession = data.active_session;
+    if (userSessions.empty) {
+      console.log("No sessions to end.");
+      return;
+    }
 
-    if (activeSession) {
-      const startTime = activeSession.start_time.toMillis();
+    const batch = db.batch();
 
-      if (startTime <= cutoffTime) {
+    userSessions.forEach(doc => {
+      const data = doc.data();
+      const activeSession = data.active_session;
+
+      if (activeSession) {
+        console.log(`Processing session for user: ${doc.id}`);
+        const loungeId = activeSession.lounge_id;
         const endTime = now;
 
-        // active_session 종료 처리
+        // Update user session
         batch.update(doc.ref, {
           "active_session.end_time": endTime,
           "session_history": admin.firestore.FieldValue.arrayUnion({
@@ -41,8 +44,7 @@ exports.autoEndSessions = functions.pubsub.schedule("every 1 hour").onRun(async 
           }),
         });
 
-        // lounge 데이터 갱신
-        const loungeId = activeSession.lounge_id;
+        // Update lounge data
         if (loungeId) {
           const loungeRef = db.collection("lounges").doc(loungeId);
           batch.update(loungeRef, {
@@ -50,10 +52,11 @@ exports.autoEndSessions = functions.pubsub.schedule("every 1 hour").onRun(async 
           });
         }
       }
-    }
-  });
+    });
 
-  // 배치 작업 커밋
-  await batch.commit();
-  console.log("Sessions ended and lounges updated.");
+    await batch.commit();
+    console.log("Sessions ended and lounges updated.");
+  } catch (error) {
+    console.error("Error processing sessions:", error);
+  }
 });
