@@ -141,140 +141,146 @@ class _MapPageState extends State<MapPage> {
     showModalBottomSheet(
       context: context,
       backgroundColor: background,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       ),
-      isDismissible: true,
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 제목
-              Center(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: mainBlue,
+        final isWeb = MediaQuery.of(context).size.width > 600; // 웹 환경 감지
+        final heightFactor = isWeb ? 0.5 : 0.6; // 웹: 50%, 모바일: 60%
+
+        return FractionallySizedBox(
+          heightFactor: heightFactor,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 제목
+                Center(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: mainBlue,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                "원하는 라운지를 선택해보세요.\n24시간이 지나면 자동으로 이용이 종료됩니다.",
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: black,
+                const SizedBox(height: 10),
+                Text(
+                  "원하는 라운지를 선택해보세요.\n24시간이 지나면 자동으로 이용이 종료됩니다.",
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: black,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              // 세부 내용 리스트
-              Expanded(
-                child: ListView.builder(
-                  itemCount: details.length,
-                  itemBuilder: (context, index) {
-                    // 라운지 유형에 따른 이미지 선택
-                    String? loungeType;
-                    String? loungeImage;
+                const SizedBox(height: 10),
+                // 세부 내용 리스트
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: details.length,
+                    itemBuilder: (context, index) {
+                      String? loungeType;
+                      String? loungeImage;
 
-                    for (String type in loungeImages.keys) {
-                      if (details[index].contains(type)) {
-                        loungeType = type;
-                        loungeImage = loungeImages[type];
-                        break;
+                      for (String type in loungeImages.keys) {
+                        if (details[index].contains(type)) {
+                          loungeType = type;
+                          loungeImage = loungeImages[type];
+                          break;
+                        }
                       }
-                    }
 
-                    return Card(
-                      color: white,
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        side: BorderSide(color: mainBlue, width: 1.5),
-                      ),
-                      elevation: 0,
-                      child: InkWell(
-                        onTap: () {
-                          _selectLounge(loungeId, title, details[index]);
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // 이미지 섹션
-                            if (loungeImage != null)
-                              ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
+                      return Card(
+                        color: white,
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(color: mainBlue, width: 1.2),
+                        ),
+                        elevation: 0,
+                        child: InkWell(
+                          onTap: () {
+                            _selectLounge(loungeId, title, details[index]);
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // 이미지 섹션
+                              if (loungeImage != null)
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    bottomLeft: Radius.circular(12),
+                                  ),
+                                  child: Image.asset(
+                                    loungeImage,
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                                child: Image.asset(
-                                  loungeImage,
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
 
-                            // 텍스트 섹션
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // 라운지 이름
-                                    Text(
-                                      details[index],
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-
-                                    // 라운지 유형
-                                    if (loungeType != null)
+                              // 텍스트 섹션
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // 라운지 이름
                                       Text(
-                                        loungeType,
-                                        style: TextStyle(
+                                        details[index],
+                                        style: const TextStyle(
                                           fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.grey[700],
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
                                         ),
                                       ),
-                                  ],
+                                      const SizedBox(height: 4),
+
+                                      // 라운지 유형
+                                      if (loungeType != null)
+                                        Text(
+                                          loungeType,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.grey[700],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
 
-              // 닫기 버튼
-              Center(
-                child: CustomButton(
-                  width: 100,
-                  height: 50,
-                  text: "닫기",
-                  func: () {
-                    setState(() {
-                      _isBottomSheetOpen = false; // 바텀시트 상태 업데이트
-                      _toggleMapInteraction(true); // Google Maps 재활성화
-                    });
-                    Navigator.pop(context);
-                  },
-                  buttonCount: 1,
+                // 닫기 버튼
+                Align(
+                  alignment: Alignment.center,
+                  child: CustomButton(
+                    width: 80,
+                    height: 40,
+                    text: "닫기",
+                    func: () {
+                      setState(() {
+                        _isBottomSheetOpen = false; // 바텀시트 상태 업데이트
+                        _toggleMapInteraction(true); // Google Maps 재활성화
+                      });
+                      Navigator.pop(context);
+                    },
+                    buttonCount: 1,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -286,6 +292,7 @@ class _MapPageState extends State<MapPage> {
       });
     });
   }
+
   void _selectLounge(String loungeId, String loungeName, String detail) async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;
     final DocumentReference userDoc =
