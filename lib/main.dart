@@ -31,11 +31,6 @@ void main() async {
     overlays: [
     ],
   );
-
-  html.document.documentElement?.style.overflow = 'hidden';
-  html.document.body?.style.margin = '0';
-  html.document.body?.style.padding = '0';
-
   runApp(const MyApp());
 }
 
@@ -107,6 +102,7 @@ class AuthHandler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+
 
     if (authProvider.user == null) {
       return LoginScreen();
