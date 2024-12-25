@@ -23,7 +23,7 @@
 
   <style>
     body {
-      height: 500vh !important;  /* Bigger than 100% to allow scroll */
+      height: 200vh !important;  /* Bigger than 100% to allow scroll */
       position: static !important;  /* Override absolute from flutter */
       overflow-y: scroll !important; /* Allows verticall scrolling */
       overflow-x: hidden !important;
@@ -46,7 +46,7 @@
     Sadly since iOS 13, this value is forced on iOS -> https://developer.apple.com/documentation/safari-release-notes/safari-13-release-notes
     */
     ::-webkit-scrollbar {
-      display: false;
+      display: none;
       width: 0px;
       height: 0px;  /* Remove scrollbar space */
       background: transparent;  /* Optional: just make scrollbar invisible */
@@ -61,32 +61,32 @@
 <script src="flutter_bootstrap.js" async></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZF1RUnWTn30ln0qw5Lryb9MdoLT9kRH0" async></script>
 
-<script>
-  function hideBrowserUI() {
-    setTimeout(() => {
-      window.scrollTo(0, 1); // 상단/하단 UI를 숨기기 위해 강제 스크롤
-    }, 100);
-  }
+<!--<script>-->
+<!--  function hideBrowserUI() {-->
+<!--    setTimeout(() => {-->
+<!--      window.scrollTo(0, 1); // 상단/하단 UI를 숨기기 위해 강제 스크롤-->
+<!--    }, 100);-->
+<!--  }-->
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const body = document.body;
-    body.style.height = "100%";
-    document.documentElement.style.height = "100%";
+<!--  document.addEventListener('DOMContentLoaded', () => {-->
+<!--    const body = document.body;-->
+<!--    body.style.height = "100%";-->
+<!--    document.documentElement.style.height = "100%";-->
 
-    const flutterContainer = document.getElementById('flutter-container');
-    flutterContainer.style.height = "auto";
-    flutterContainer.style.minHeight = "100vh";
-    flutterContainer.style.overflowY = "auto";
+<!--    const flutterContainer = document.getElementById('flutter-container');-->
+<!--    flutterContainer.style.height = "auto";-->
+<!--    flutterContainer.style.minHeight = "100vh";-->
+<!--    flutterContainer.style.overflowY = "auto";-->
 
-    if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
-      console.log('PWA 모드에서 실행 중');
-    } else {
-      console.log('일반 브라우저 모드에서 실행 중');
-      hideBrowserUI();
-    }
-  });
+<!--    if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {-->
+<!--      console.log('PWA 모드에서 실행 중');-->
+<!--    } else {-->
+<!--      console.log('일반 브라우저 모드에서 실행 중');-->
+<!--      hideBrowserUI();-->
+<!--    }-->
+<!--  });-->
 
-  window.addEventListener('resize', hideBrowserUI);
-</script>
+<!--  window.addEventListener('resize', hideBrowserUI);-->
+<!--  </script>-->
 </body>
 </html>
