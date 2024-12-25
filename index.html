@@ -22,23 +22,23 @@
   <title>StudyWith</title>
 
   <style>
-    /* Body 기본 설정 */
     html, body {
       margin: 0;
       padding: 0;
       width: 100%;
       height: 100%;
-      overflow-y: scroll; /* 스크롤 활성화 */
-      -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 */
+      overflow-y: scroll;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
     }
 
     #flutter-container {
       width: 100%;
-      height: auto; /* Flutter 앱 높이를 콘텐츠에 따라 유동적으로 설정 */
-      min-height: 100vh; /* 최소 높이를 뷰포트 높이로 설정 */
+      height: auto;
+      min-height: 100vh;
+      overflow-y: auto;
     }
 
-    /* Flutter 기본 레이아웃 수정 */
     flt-glass-pane {
       position: absolute !important;
       top: 0;
@@ -46,62 +46,41 @@
       width: 100%;
       height: 100%;
     }
-
-    /* 콘텐츠 숨기기 */
-    #content {
-      display: none; /* Flutter 앱 로드 전 기본 콘텐츠 숨김 */
-    }
   </style>
 </head>
 <body>
 <div id="flutter-container"></div>
 
-<!-- Flutter 앱 로드 중 보일 기본 콘텐츠 -->
-<div id="content">
-  <h1>Welcome to StudyWith</h1>
-  <p>This is a fullscreen experience.</p>
-</div>
-
 <!-- Flutter Web 애플리케이션 -->
 <script src="flutter_bootstrap.js" async></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZF1RUnWTn30ln0qw5Lryb9MdoLT9kRH0"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZF1RUnWTn30ln0qw5Lryb9MdoLT9kRH0" async></script>
 
-<!-- JavaScript 통합 -->
 <script>
-  // 브라우저 UI 숨기기
   function hideBrowserUI() {
     setTimeout(() => {
-      window.scrollTo(0, 1); // 브라우저의 상단/하단 UI를 숨김
+      window.scrollTo(0, 1);
     }, 100);
   }
 
-  // DOMContentLoaded 이벤트
   document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
+    body.style.height = "100%";
+    document.documentElement.style.height = "100%";
 
-    // 기본 콘텐츠 숨김
-    document.getElementById('content').style.display = 'none';
+    const flutterContainer = document.getElementById('flutter-container');
+    flutterContainer.style.height = "auto";
+    flutterContainer.style.minHeight = "100vh";
+    flutterContainer.style.overflowY = "auto";
 
-    // 일반 브라우저 모드와 PWA 모드 구분
     if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
-      body.classList.add('pwa-mode');
       console.log('PWA 모드에서 실행 중');
     } else {
-      body.classList.add('browser-mode');
       console.log('일반 브라우저 모드에서 실행 중');
-      hideBrowserUI(); // 브라우저 UI 숨기기
+      hideBrowserUI();
     }
-
-    // 화면 크기 변경 시 UI 숨김 유지
-    window.addEventListener('resize', hideBrowserUI);
   });
 
-  // Flutter 앱이 로드된 후 스크롤 정상 동작 보장
-  window.addEventListener('load', () => {
-    const flutterContainer = document.getElementById('flutter-container');
-    flutterContainer.style.height = 'auto'; // 높이를 콘텐츠에 따라 조정
-    flutterContainer.style.minHeight = '100vh'; // 최소 높이 설정
-  });
+  window.addEventListener('resize', hideBrowserUI);
 </script>
 </body>
 </html>
