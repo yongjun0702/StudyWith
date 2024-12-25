@@ -28,17 +28,19 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden; /* 스크롤바 완전 제거 */
+      overflow-y: scroll; /* 스크롤 활성화 */
+      -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 */
     }
 
     #flutter-container {
       width: 100%;
-      height: 100%; /* Flutter 앱이 화면 전체를 차지하도록 설정 */
+      height: auto; /* Flutter 앱 높이를 콘텐츠에 따라 유동적으로 설정 */
+      min-height: 100vh; /* 최소 높이를 뷰포트 높이로 설정 */
     }
 
     /* Flutter 기본 레이아웃 수정 */
     flt-glass-pane {
-      position: absolute !important; /* Flutter의 absolute 속성 유지 */
+      position: absolute !important;
       top: 0;
       left: 0;
       width: 100%;
@@ -69,7 +71,7 @@
   // 브라우저 UI 숨기기
   function hideBrowserUI() {
     setTimeout(() => {
-      window.scrollTo(0, 1); // 스크롤을 강제하여 상단바/하단바 숨김
+      window.scrollTo(0, 1); // 브라우저의 상단/하단 UI를 숨김
     }, 100);
   }
 
@@ -92,6 +94,13 @@
 
     // 화면 크기 변경 시 UI 숨김 유지
     window.addEventListener('resize', hideBrowserUI);
+  });
+
+  // Flutter 앱이 로드된 후 스크롤 정상 동작 보장
+  window.addEventListener('load', () => {
+    const flutterContainer = document.getElementById('flutter-container');
+    flutterContainer.style.height = 'auto'; // 높이를 콘텐츠에 따라 조정
+    flutterContainer.style.minHeight = '100vh'; // 최소 높이 설정
   });
 </script>
 </body>
