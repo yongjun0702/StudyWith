@@ -33,23 +33,29 @@ class _MapPageState extends State<MapPage> {
         '아르테크네 스페이스 3층',
         '아르테크네 스페이스 4층',
         '아르테크네 스페이스 5층',
-        '아르테크네 스페이스 6층',
-        'C-CUBE 1층'
+        '아르테크네 스페이스 6층'
       ]
+    },
+    {
+      'id': 'Semiconductor',
+      'name': '반도체대학',
+      'lat': 37.451071,
+      'lng': 127.127163,
+      'details': ['아르테크네 스페이스 1층 입구']
     },
     {
       'id': 'GachonHall',
       'name': '가천관',
       'lat': 37.4504147,
       'lng': 127.1299445,
-      'details': ['아르테크네 스페이스 지하1층', '라곰 스페이스 1층']
+      'details': ['아르테크네 스페이스 지하1층', '라곰 스페이스 1층', '아르테크네 스페이스 3층']
     },
     {
       'id': 'GlobalCenter',
       'name': '글로벌센터',
       'lat': 37.4519359,
       'lng': 127.1271641,
-      'details': ['아르테크네 스페이스 4층', '아르테크네 스페이스 5층', 'G-SPACE 1층']
+      'details': ['아르테크네 스페이스 1층', '아르테크네 스페이스 5층', '아르테크네 스페이스 6층']
     },
     {
       'id': 'Engineering1',
@@ -66,6 +72,13 @@ class _MapPageState extends State<MapPage> {
       'details': ['아르테크네 스페이스 1층', '아르테크네 스페이스 2층', '아르테크네 스페이스 4층']
     },
     {
+      'id': 'Library',
+      'name': '중앙도서관',
+      'lat': 37.452317,
+      'lng': 127.132798,
+      'details': ['아르테크네 스페이스 1층']
+    },
+    {
       'id': 'IT',
       'name': 'AI공학관',
       'lat': 37.4551790,
@@ -74,7 +87,17 @@ class _MapPageState extends State<MapPage> {
         '아르테크네 스페이스 2층',
         '아르테크네 스페이스 4층',
         '아르테크네 스페이스 5층',
+        'CUBE 5층',
         '아르테크네 스페이스 7층'
+      ]
+    },
+    {
+      'id': 'dormitory3',
+      'name': '제3기숙사',
+      'lat': 37.45583,
+      'lng': 127.13352,
+      'details': [
+        '아르테크네 스페이스 1층'
       ]
     },
     {
@@ -82,14 +105,14 @@ class _MapPageState extends State<MapPage> {
       'name': '공과대학2',
       'lat': 37.4493148,
       'lng': 127.1285074,
-      'details': ['아르테크네 스페이스 1층']
+      'details': ['아르테크네 스페이스 1층 입구']
     },
     {
       'id': 'Art1',
       'name': '예술·체육대학1',
       'lat': 37.4523127,
       'lng': 127.1287385,
-      'details': ['아르테크네 스페이스 1층', '아르테크네 스페이스 2층']
+      'details': ['아르테크네 스페이스 2층', '아르테크네 스페이스 3층']
     },
     {
       'id': 'Art2',
@@ -135,7 +158,7 @@ class _MapPageState extends State<MapPage> {
       '하나라운지': 'assets/img/lounge_img10.png',
       '라곰 스페이스': 'assets/img/lounge_img1.png',
       'G-SPACE': 'assets/img/lounge_img4.jpg',
-      'C-CUBE': 'assets/img/lounge_img5.png',
+      'CUBE': 'assets/img/lounge_img5.png',
     };
 
     showModalBottomSheet(
@@ -296,9 +319,9 @@ class _MapPageState extends State<MapPage> {
   void _selectLounge(String loungeId, String loungeName, String detail) async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;
     final DocumentReference userDoc =
-        _firestore.collection('user_sessions').doc(uid);
+    _firestore.collection('user_sessions').doc(uid);
     final DocumentReference loungeDoc =
-        _firestore.collection('lounges').doc(loungeId);
+    _firestore.collection('lounges').doc(loungeId);
 
     try {
       // 사용자 세션 확인
@@ -315,7 +338,7 @@ class _MapPageState extends State<MapPage> {
             context: context,
             title: "선택 실패",
             dialogContent:
-                "이미 ${activeSession['lounge_name']}에서 이용하고 있어요.\n종료 후 다시 선택해주세요.",
+            "이미 ${activeSession['lounge_name']}에서 이용하고 있어요.\n종료 후 다시 선택해주세요.",
             buttonText: "확인",
             buttonCount: 1,
             func: () {
@@ -372,7 +395,7 @@ class _MapPageState extends State<MapPage> {
         func: () {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => RootTab()),
-            (Route<dynamic> route) => false,
+                (Route<dynamic> route) => false,
           );
         },
       );

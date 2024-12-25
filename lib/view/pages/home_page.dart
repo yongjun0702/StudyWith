@@ -111,14 +111,23 @@ class _HomePageState extends State<HomePage> {
 
       // 세션 종료 처리
       final Timestamp now = Timestamp.now();
+
+      activeSession['end_time'] = now;
+
+      List<dynamic> sessionHistory = userData['session_history'] ?? [];
+      for (int i = 0; i < sessionHistory.length; i++) {
+        Map<String, dynamic> session = sessionHistory[i] as Map<String, dynamic>;
+        if (session['start_time'] == activeSession['start_time'] &&
+            session['lounge_id'] == activeSession['lounge_id']) {
+          session['end_time'] = now;
+          sessionHistory[i] = session; // 수정된 세션으로 대체
+          break;
+        }
+      }
+
       await userDoc.update({
-        'active_session.end_time': now, // 활성 세션에 종료 시간 기록
-        'session_history': FieldValue.arrayUnion([
-          {
-            ...activeSession,
-            'end_time': now,
-          }
-        ])
+        'active_session': activeSession, // active_session의 end_time 갱신
+        'session_history': sessionHistory, // session_history 갱신
       });
 
       // 라운지 데이터 업데이트
@@ -151,6 +160,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     String displayName = (_userName?.length ?? 0) > 10
