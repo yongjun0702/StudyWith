@@ -461,7 +461,9 @@ class _HomePageState extends State<HomePage> {
                   StreamBuilder<QuerySnapshot>(
                     stream: _firestore
                         .collection('lounges')
-                        .snapshots(), // Firestore에서 데이터 가져오기
+                        .orderBy('current_users', descending: true)
+                        .limit(5)
+                        .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Center(child: CircularProgressIndicator());
