@@ -22,45 +22,30 @@
 
     <title>StudyWith</title>
     <style>
-        /* 브라우저의 기본 스크롤 활성화 */
+        /* 기본 브라우저 스크롤 활성화 */
         html, body {
             margin: 0;
             padding: 0;
-            height: 100%; /* 전체 뷰포트를 기준 */
-            overflow-y: scroll; /* 브라우저 기본 스크롤 허용 */
-            overflow-x: hidden; /* 수평 스크롤 비활성화 */
-            touch-action: pan-y; /* 세로 스크롤 제스처 허용 */
+            height: auto; /* 자동 높이 조절 */
+            overflow-y: scroll; /* 브라우저 기본 세로 스크롤 허용 */
+            overflow-x: hidden; /* 가로 스크롤 비활성화 */
+            touch-action: pan-y; /* 세로 스크롤 동작 허용 */
             overscroll-behavior: none; /* 스크롤 튕김 방지 */
             -webkit-overflow-scrolling: touch; /* iOS에서 부드러운 스크롤 */
         }
 
-        /* Flutter 캔버스가 스크롤 동작에 영향을 주지 않도록 설정 */
-        flt-glass-pane {
-            position: fixed; /* 캔버스를 뷰포트에 고정 */
-            top: 0;
-            left: 0;
+        /* Flutter 캔버스 크기를 자동으로 확장 */
+        #flutter-container {
             width: 100%;
-            height: 100%;
-            pointer-events: none; /* Flutter 캔버스 영역 외부에서 발생하는 스크롤을 허용 */
+            height: auto; /* 높이를 자동으로 조정 */
+            min-height: 100vh; /* 뷰포트 최소 높이 */
         }
 
-        /* 브라우저 UI 숨기기를 위한 충분한 스크롤 여유 공간 확보 */
-        body::after {
-            content: '';
-            display: block;
-            height: 150vh; /* 스크롤 여유 공간 추가 */
+        /* Flutter 내부 콘텐츠가 외부 스크롤을 막지 않도록 설정 */
+        flt-glass-pane {
+            position: static; /* 고정되지 않도록 설정 */
+            pointer-events: auto; /* 이벤트를 차단하지 않음 */
         }
-
-        /* 스크롤바 스타일 */
-        ::-webkit-scrollbar {
-            display: none; /* 스크롤바를 보이지 않도록 */
-        }
-
-        /* 추가로 스크롤 튕김 방지를 위한 설정 */
-        body {
-            overscroll-behavior-y: contain; /* 상단/하단 끝에서 튕김 방지 */
-        }
-
     </style>
 </head>
 <body>
@@ -70,33 +55,5 @@
 <script src="flutter_bootstrap.js" async></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZF1RUnWTn30ln0qw5Lryb9MdoLT9kRH0"
         async></script>
-
-<!--<script>-->
-<!--  function hideBrowserUI() {-->
-<!--    setTimeout(() => {-->
-<!--      window.scrollTo(0, 1); // 상단/하단 UI를 숨기기 위해 강제 스크롤-->
-<!--    }, 100);-->
-<!--  }-->
-
-<!--  document.addEventListener('DOMContentLoaded', () => {-->
-<!--    const body = document.body;-->
-<!--    body.style.height = "100%";-->
-<!--    document.documentElement.style.height = "100%";-->
-
-<!--    const flutterContainer = document.getElementById('flutter-container');-->
-<!--    flutterContainer.style.height = "auto";-->
-<!--    flutterContainer.style.minHeight = "100vh";-->
-<!--    flutterContainer.style.overflowY = "auto";-->
-
-<!--    if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {-->
-<!--      console.log('PWA 모드에서 실행 중');-->
-<!--    } else {-->
-<!--      console.log('일반 브라우저 모드에서 실행 중');-->
-<!--      hideBrowserUI();-->
-<!--    }-->
-<!--  });-->
-
-<!--  window.addEventListener('resize', hideBrowserUI);-->
-<!--  </script>-->
 </body>
 </html>
